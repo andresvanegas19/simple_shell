@@ -9,9 +9,8 @@ int main()
 
 	path = get_path(environ);
 	head = made_the_linked_list_path(path);
+	found_cmmd("touch", head);
 
-
-//	found_cmmd("ls",path);
 }
 /*
 int magia (recibir un monton de parametros)
@@ -23,21 +22,36 @@ int magia (recibir un monton de parametros)
 	fork ---->display_command();
 }
 */
-// hacer la lista linkeada
-
-
+/* Esta funcion abre memoria */
 char *found_cmmd(char *comando, struct_path *head)
 {
 	struct stat st;
+	char *path_cmd = NULL;
 
 	if (stat(comando, &st) == 0)
 	{
+		printf("%s\n", comando);
 		return(comando);
 	}
 
-
-
-return ("No retorna nada pedazo de monda");
+	while (head->next)
+	{
+	/* Abre memoria para que pueda almacenar el tamano del path y del comando, son 2 por el //0 */
+		path_cmd= malloc((strlen(head->str) + strlen(comando)) + 2);
+		strcpy(path_cmd, head->str);
+		strcat(path_cmd, "/");
+		strcat(path_cmd, comando);
+//		printf("%s\n", path_cmd);
+		free(path_cmd);
+		head = head->next;
+		if (stat(path_cmd, &st) == 0)
+		{
+			printf("%s\n",path_cmd);
+			return(comando);
+		}
+	}
+	perror("Error: ");
+	return (NULL);
 }
 
 /* 4. PATH
