@@ -3,34 +3,114 @@
 int main()
 {
 	char *path = NULL;
+	struct_path *head = NULL;
 
-	poth *puntero;
-	prompt();
+//	prompt();
+
 	path = get_path(environ);
-	printf("%s\n", path);
+	head = made_the_linked_list_path(path);
+
+
+//	found_cmmd("ls",path);
 }
+/*
+int magia (recibir un monton de parametros)
+{
+	path = get_path(environ);
+	if (commando == ya no encuentra)
+		made_the_linked_list_path(path);
+	found_cmmd(char *comando, char puntero de la linked list);
+	fork ---->display_command();
+}
+*/
+// hacer la lista linkeada
+
+
+char *found_cmmd(char *comando, struct_path *head)
+{
+	struct stat st;
+
+	if (stat(comando, &st) == 0)
+	{
+		return(comando);
+	}
+
+
+
+return ("No retorna nada pedazo de monda");
+}
+
+/* 4. PATH
+Write a function that builds a linked list of the PATH directories.
+Retorna el primer nodo de la lista linkeada*/
+struct_path *made_the_linked_list_path(char *path)
+{
+	struct_path *head = NULL;
+	char *token = NULL;
+
+	token = strtok(path, ":");
+
+	while (token)
+	{
+//		printf("%s\n", token);
+		add_node_end(&head, token);
+		token = strtok(NULL, ":");
+	}
+//	printf ("%s\n", path);
+//	printf ("%ld\n", sizeof(struct_path));
+	return (head);
+}
+
+/*Esta funcion abre memoria, se necesita una funcion para liberar este espacio de memoria*/
+struct_path *add_node_end(struct_path **head, char *str)
+{
+	int count = 0;
+	struct_path *newNode = NULL, *end = *head;
+
+	newNode = malloc(sizeof(struct_path));
+	if (newNode == NULL)
+	{
+		perror("Error: ");
+		return (NULL);
+	}
+
+	newNode->str = strdup(str);
+	newNode->next = NULL;
+	if (!*head)
+	{
+		*head = newNode;
+		return (*head);
+	}
+	while (end->next != NULL)
+		end = end->next;
+	end->next = newNode;
+
+	return (newNode);
+}
+
 char *get_path(char **environ)
 {
-	int i = 0, validacion;
+	int i = 0, validacion = 0;
 	char *token = NULL;
 
 	for (i = 0; environ[i]; i++)
 	{
 		token = strtok(environ[i], "=");
-		validacion = strcmp(token,"PATH");
+		validacion = _strcmp(token,"PATH");
 		if (validacion == 0)
 			return (token = strtok(NULL, "="));
 
 		token = NULL;
 	}
+	perror("Error : not found the envoromental variable - path");
 	return(NULL);
 }
+
 // hacer el bucle
 // que compile con los flags
 // con valgrind
 // que guarde el path
 // y que busque la funcion
-
 // recibir comando, recibir la variable global
 
 // la variable global se busca el PATH
@@ -47,6 +127,13 @@ void prompt(void)
 	print_promp();
 	signal(SIGINT, manejar_signal);
 	validar = getline(&buffer, &length, stdin);
+/* Si obtengo un valor negativo de getline, mean that, se van a salir de la funcion*/
+	if(validar == EOF)
+	{
+		write(1,"\n",2);
+		free(buffer);
+		exit(EOF);
+	}
 
 	for (; buffer[i] != '\n'; i++)
 		;
@@ -73,4 +160,17 @@ void manejar_signal()
 void print_promp(void)
 {
 	write(STDOUT_FILENO, "$ ", 2);
+}
+
+/* Para liberar memoria de la lista linkeada*/
+void free_list(struct_path *head)
+{
+	struct_path *back;
+	while (head)
+	{
+		back = head->next;
+		free(head->str);
+		free(head);
+		head = back;
+	}
 }

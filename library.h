@@ -8,6 +8,19 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <sys/stat.h>
+
+/* estructura sobre el env*/
+typedef struct path_of_the_directory
+{
+	char *str;
+	struct path_of_the_directory *next;
+
+} struct_path;
+
+struct_path *made_the_linked_list_path(char *path);
+struct_path *add_node_end(struct_path **head, char *str);
+
 
 /* Para manejar el env*/
 extern char **environ;
@@ -21,19 +34,10 @@ void print_promp();
 
 /* obtener los path y otras cosas*/
 char *get_path(char **environ);
-int strcompare(char *s1, char *s2);
+char *found_cmmd(char *comando, struct_path *head);
 
-/* estructura sobre el env*/
-
-typedef struct dondeestaelpath
-{
-
-	char *path;
-	char *shell;
-	char *pwd;
-	char *home;
-
-} poth;
+/* Manipular los strings */
+int _strcmp(char *s1, char *s2);
 
 
 
