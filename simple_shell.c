@@ -1,40 +1,75 @@
 #include "library.h"
 
-int main()
+int main(int ac, char **av)
 {
 	char *path = NULL;
 	struct_path *head = NULL;
+
+// verificar la entrada si es un archivo
+// si es un archivo verificar si se  puede ejecutar
+	if (ac > 2)
+		perror("Error: ");
 
 	path = get_path(environ);
 	head = made_the_linked_list_path(path);
 
 	prompt(head);
 
-//	found_cmmd("NULL", head);
+//	found_basic_cmd("NULL", head);
 //	printf("%s\n",head->str);
 }
-/*
-char made_comands(char *comando)
-{
-
-	if (strcmp(comando, "exit") == 0)
-		exitfuncion();
-
-	return (NULL);
-
-}*/
-
-/* Esta funcion abre memoria */
-char *found_cmmd(char *comando, struct_path *head)
+char *found_thecommands(char *comando, struct_path *head)
 {
 	struct stat st;
-	char *path_cmd = NULL;
 
 	if (stat(comando, &st) == 0)
 	{
-//		printf("%s\n", comando);
+		//printf("%s\n", comando);
 		return(comando);
 	}
+	found_made_comands(comando, head);
+	found_basic_cmd(comando, head);
+
+	return (NULL);
+}
+
+void print_env()
+{
+	int i;
+
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		write(STDOUT_FILENO, environ[i], strlen(environ[i]));
+		write(STDOUT_FILENO,"\n", 2);
+	}
+}
+void exitfuncion(struct_path *head)
+{
+	free_list(head);
+	exit(0);
+}
+
+
+char *found_made_comands(char *comando, struct_path *head)
+{
+	if (strcmp(comando, "exit") == 0)
+		exitfuncion(head);
+
+	if (strcmp(comando, "exit") == 0)
+	{
+		print_env();
+		return (NULL);
+	}
+
+	return (NULL);
+
+}
+
+/* Esta funcion abre memoria */
+char *found_basic_cmd(char *comando, struct_path *head)
+{
+	struct stat st;
+	char *path_cmd = NULL;
 
 	while (head->next)
 	{
@@ -52,7 +87,6 @@ char *found_cmmd(char *comando, struct_path *head)
 			return(path_cmd);
 		}
 	}
-	perror(comando);
 	return (NULL);
 }
 
@@ -162,15 +196,22 @@ void prompt(struct_path *head)
 	magic(head, divide);
 	//printf("%i - %i", i, j);
 	//printf("%s\n",divide[0]);
+	free_list(head);
 	free(buffer);
 }
 
+// aca hay que pasarle el exit para que revise
 void magic(struct_path *head, char **token)
 {
 	char *path_cmd = NULL;
 	int i = 0;
 	//printf("%s\n", token[0]);
-	path_cmd = found_cmmd(token[0],head);
+	path_cmd = found_thecommands(token[0],head);
+	if (path_cmd == NULL)
+	{
+		perror(path_cmd);
+	}
+
 	printf("%s\n", path_cmd);
 	token[0] = path_cmd;
 	command(token);
@@ -192,7 +233,7 @@ int command(char **args)
 		if (execve(args[0], args, NULL) == -1)
 		{
 			perror(args[0]);
-			return (-1);
+			_exit(EXIT_FAILURE);
 		}
 	}
 	else

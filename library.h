@@ -32,7 +32,13 @@ void print_promp();
 
 /* obtener los path y otras cosas*/
 char *get_path(char **environ);
-char *found_cmmd(char *comando, struct_path *head);
+char *found_made_comands(char *comando, struct_path *head);
+char *found_basic_cmd(char *comando, struct_path *head);
+char *found_thecommands(char *comando, struct_path *head);
+
+/* Funciones made by us*/
+void print_env();
+void exitfuncion(struct_path *head);
 
 /* Manipular los strings */
 int _strcmp(char *s1, char *s2);
