@@ -5,23 +5,25 @@ int main()
 	char *path = NULL;
 	struct_path *head = NULL;
 
-//	prompt();
-
 	path = get_path(environ);
 	head = made_the_linked_list_path(path);
-	found_cmmd("touch", head);
 
+	prompt(head);
+
+//	found_cmmd("NULL", head);
+//	printf("%s\n",head->str);
 }
 /*
-int magia (recibir un monton de parametros)
+char made_comands(char *comando)
 {
-	path = get_path(environ);
-	if (commando == ya no encuentra)
-		made_the_linked_list_path(path);
-	found_cmmd(char *comando, char puntero de la linked list);
-	fork ---->display_command();
-}
-*/
+
+	if (strcmp(comando, "exit") == 0)
+		exitfuncion();
+
+	return (NULL);
+
+}*/
+
 /* Esta funcion abre memoria */
 char *found_cmmd(char *comando, struct_path *head)
 {
@@ -30,7 +32,7 @@ char *found_cmmd(char *comando, struct_path *head)
 
 	if (stat(comando, &st) == 0)
 	{
-		printf("%s\n", comando);
+//		printf("%s\n", comando);
 		return(comando);
 	}
 
@@ -46,17 +48,17 @@ char *found_cmmd(char *comando, struct_path *head)
 		head = head->next;
 		if (stat(path_cmd, &st) == 0)
 		{
-			printf("%s\n",path_cmd);
-			return(comando);
+//			printf("%s\n",path_cmd);
+			return(path_cmd);
 		}
 	}
-	perror("Error: ");
+	perror(comando);
 	return (NULL);
 }
 
 /* 4. PATH
 Write a function that builds a linked list of the PATH directories.
-Retorna el primer nodo de la lista linkeada*/
+Retorna el primer nodo de la lista linkeada */
 struct_path *made_the_linked_list_path(char *path)
 {
 	struct_path *head = NULL;
@@ -131,19 +133,19 @@ char *get_path(char **environ)
 
 // ya tenemos PATH y comando
 // se busca el comando por el PATH
-void prompt(void)
+void prompt(struct_path *head)
 {
 	char *buffer = NULL, *divide[4];
 	size_t length = 32;
 	int i = 0, j = 0, validar = 0;
-	int status;
 
 	print_promp();
 	signal(SIGINT, manejar_signal);
 	validar = getline(&buffer, &length, stdin);
-/* Si obtengo un valor negativo de getline, mean that, se van a salir de la funcion*/
+/* Si obtengo un valor negativo de getline, mean that, se van a salir de la funcion */
 	if(validar == EOF)
 	{
+		free_list(head);
 		write(1,"\n",2);
 		free(buffer);
 		exit(EOF);
@@ -151,17 +153,52 @@ void prompt(void)
 
 	for (; buffer[i] != '\n'; i++)
 		;
-
 	buffer[i] = '\0';
 
 	divide[j] = strtok(buffer, " ");
-
 	while (divide[j] != NULL)
 		divide[++j] = strtok(NULL, " ");
 
+	magic(head, divide);
 	//printf("%i - %i", i, j);
 	//printf("%s\n",divide[0]);
 	free(buffer);
+}
+
+void magic(struct_path *head, char **token)
+{
+	char *path_cmd = NULL;
+	int i = 0;
+	//printf("%s\n", token[0]);
+	path_cmd = found_cmmd(token[0],head);
+	printf("%s\n", path_cmd);
+	token[0] = path_cmd;
+	command(token);
+}
+
+
+int command(char **args)
+{
+	pid_t child_pid;
+	int status;
+
+	printf("%s\n", args[0]);
+	child_pid = fork();
+
+	if (child_pid < 0)
+		return (-1);
+	else if (child_pid == 0)
+	{
+		if (execve(args[0], args, NULL) == -1)
+		{
+			perror(args[0]);
+			return (-1);
+		}
+	}
+	else
+		child_pid = wait(&status);
+
+	return (0);
 }
 
 /* Para que cuando ejecute el comando ^C lo pase y siga su proceso*/

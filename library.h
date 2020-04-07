@@ -20,13 +20,11 @@ typedef struct path_of_the_directory
 
 struct_path *made_the_linked_list_path(char *path);
 struct_path *add_node_end(struct_path **head, char *str);
-
+void free_list(struct_path *head);
 
 /* Para manejar el env*/
 extern char **environ;
 
-/* imprime el promp*/
-void prompt(void);
 
 /*manejar sign y commandos */
 void manejar_signal();
@@ -39,6 +37,12 @@ char *found_cmmd(char *comando, struct_path *head);
 /* Manipular los strings */
 int _strcmp(char *s1, char *s2);
 
+/* funcion del commando del arg*/
+int command(char **args);
+
+/* Funcion que ajunta el promp */
+void prompt(struct_path *head);
+void magic(struct_path *head, char **token);
 
 
 #endif /* GRANDPARENT_H */
