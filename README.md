@@ -1,50 +1,49 @@
 # **A simple shell**
-Un proyecto basado en el interprete de comandos [Bourne Shell](https://es.wikipedia.org/wiki/Bourne_Shell) **(sh)** con varias diferencias en la estructura y manejo de memoria, para mirar el funcionamiento de este pryecto y la estructura ir al [@WiKi](https://github.com/andresvanegas19/simple_shell/wiki).
+A project based on the command interpreter [Bourne Shell](https://es.wikipedia.org/wiki/Bourne_Shell) **(sh)** with several differences in the structure and memory management, to look at the functioning of this project and as this the structure in the [@WiKi](https://github.com/andresvanegas19/simple_shell/wiki).
 
 ## start
-_Las siguientes instrucciones te permitiran obetener una copia del proyecto local para proposito de desarrolo y pruebas_
+_The following instructions will allow you to obtain a copy of the local project for development and testing purposes_
 
-### Pre-requisitos
-Es recomendable correr el proyecto sobre `Ubuntu 14.04 LTS` para tener no tener fallas en el programa y en el proyecto
+### pre-requisite
+It is advisable to run the project on `Ubuntu 14.04 LTS` to have no failures in the program and in the project
 
-### Instalacion
-Para la instalacion de este proyecto seguir los siguientes pasos:
+### installation
+For the installation of this project follow the following steps:
 
-Ejecutar el siguiente comando en tu terminal.
+Run the following command on your terminal.
 ```
 git clone git@github.com:andresvanegas19/simple_shell.git
 ```
-moverte al directorio donde esta el proyecto y compilarlo.
+Then you have to move to the directory where the project is and compile it.
 ```
 cd simple_shell
 gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
 ```
-Dar inicio al proyecto
+Start up the project
 ```
 ./hsh
 ```
-Ejemplos de su uso en modo interactivo y no interactivo:
+Examples of its use in interactive and non-interactive mode:
 ![Image to show how to use the project](https://github.com/andresvanegas19/simple_shell/blob/master/example_of_shell.png)
-## Ejecutando las prueba ⚙️
-Para ejecutar pruebas sobre este proyecto y mirar su comportamiento es igual al interperete de comandos (sh) clonar el siguiente repositorio y mover el ejecutable a ese [repositorio](https://github.com/davidgonzalezfx/bog-0120_shell_edge_cases) para ver que pruebas se usaron para ver el correcto funcionamiento
+## Running the tests ⚙️
+To run tests on this project and look at its behavior is equal to the shell (sh) clone the next repository and move the executable to that [repositorio](https://github.com/davidgonzalezfx/bog-0120_shell_edge_cases) to see what tests were used to see the correct functioning
 
 ## Construido con 🛠️
-se usaron las siguientes herramientas para construir el proyecto
-- gdb
+the following tools were used to build the project- gdb
 - valgrind
-Se contruyo en el lenguaje de programacion de c
+It was built into the programming language of c
 
 ## Wiki 📖
-Puedes encontrar mucho más de cómo utilizar este proyecto en nuestra y ver que librerias se usan para la construccion de este proyecto [Wiki](https://github.com/andresvanegas19/simple_shell/wiki).
+You can find much more of how to use this project in our and see what libraries are used for the construction of this project [Wiki](https://github.com/andresvanegas19/simple_shell/wiki).
 
-## Autores ✒️
+## authors ✒️
 ****
 **Christian Campos** - [GitHub](https://github.com/ChristianCampos-55)
 **Andres reyes** - [GitHub](https://github.com/andresvanegas19)
 
 
-## Licencia 📄
-Este proyecto está bajo la Licencia MIT - mira el archivo [LICENSE](https://github.com/andresvanegas19/simple_shell/blob/master/LICENSE) para ver mas detalles
+## license 📄
+This project is under the MIT License - see the file [LICENSE](https://github.com/andresvanegas19/simple_shell/blob/master/LICENSE) para ver mas detalles
 
-## Gracias
-el siguiente proyecto se logra gracias a la guia de holberton y starkoverflow
+## acknowledgements
+the next plan is reached thanks to the guide of holberton and starkoverflow
