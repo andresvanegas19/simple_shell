@@ -103,6 +103,7 @@ int magic(struct_path *head, char **token, char *buffer)
 		}
 		else
 			perror(path_cmd);
+			free(path_cmd);
 		return (0);
 	}
 	return (0);
@@ -262,16 +263,18 @@ int verificarbuffer(char *buffer, int validar)
 
 /**
  * manejar_signal - supresses use of ctrl - c.
+ * @valor: value sent by signal.
  *
  * Return: void.
  */
-void manejar_signal()
+void manejar_signal(int valor)
 {
+	(void) valor;
 	write(STDOUT_FILENO, "\nnoseagay$ ", strlen("\nnoseagay$ "));
 }
 
 /**
- * made_the_linked_list_path - creates linked list 
+ * made_the_linked_list_path - creates linked list
  * made of PATH adresses.
  * @path: path to compartmentalize.
  *

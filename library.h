@@ -33,7 +33,7 @@ void free_list(struct_path *head);
 extern char **environ;
 
 /*Handles signal supression ctrl - c*/
-void manejar_signal();
+void manejar_signal(int);
 
 /*Checks buffer for errors*/
 int verificarbuffer(char *buffer, int validar);
