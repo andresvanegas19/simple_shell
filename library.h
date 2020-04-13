@@ -11,57 +11,55 @@
 #include <signal.h>
 #include <sys/stat.h>
 #include <limits.h>
-
-/**
- * struct path_of_the_directory - singly linked list for PATH
- * @str: malloc'ed node for the list.
- * @next: link to point to the next node.
- * Description: Singly linked list to store the PATH for command navigation.
- */
-
+/* estructura sobre el env*/
 typedef struct path_of_the_directory
 {
 	char *str;
 	struct path_of_the_directory *next;
+
 } struct_path;
+
+int builtint_functions(struct_path *head_path, char **token, char *buffer);
 
 struct_path *made_the_linked_list_path(char *path);
 struct_path *add_node_end(struct_path **head, char *str);
+struct_path *made_the_linked_list_enviroment(char **environ);
 void free_list(struct_path *head);
 
-/*Helps handle env printing*/
+/* Para manejar el env y errno*/
 extern char **environ;
 
-/*Handles signal supression ctrl - c*/
-void manejar_signal(int);
+/*manejar sign y commandos */
+void manejar_signal(int valor);
 
-/*Checks buffer for errors*/
+/* verificar que no hay errores*/
 int verificarbuffer(char *buffer, int validar);
 
-/*Prints errors*/
-void print_error(int digito, char *error, char *command);
+/* Imprimir errores */
+void printError(int num_cmd, int validacion, char *command);
 
-/*These handle the path, finds commands and handles their execution*/
-
+/* obtener los path y otras cosas*/
 char *get_path(char **environ, char *direccion);
-char *found_made_comands(char *comando, struct_path *head);
-char *basic_commands(char *comando, struct_path *head);
-char *found_thecommands(char *comando, struct_path *head);
+char *basic_commands(char *comando, struct_path *head_path);
 
-/* Functions created by us for specific functionalities*/
+/* Funciones made by us*/
 void print_env(char **environ);
-void exitfuncion(void);
+void exitfuncion();
 
-/* Compares strings */
+/* Manipular los strings */
 int _strcmp(char *s1, char *s2);
+int _strlen(char *s);
+char *_strcpy(char *dest, char *src);
+char *_strdup(char *str);
+char *_strcat(char *strg1, char *strg2);
 
-/* Checks and executes commands */
+/* funcion del commando del arg*/
 int command(char *path, char **args, char **environ);
 
-/* Handles prompt, strtok and buffer errors */
-char *prompt(struct_path *head, int validacion);
+/* Funcion que ajunta el promp */
+char *prompt(struct_path *head_path, int validacion);
+int magic(struct_path *head_path, char **token, char *buffer);
+int support_magic(char **token);
 
-/* Where magic happens. Checks buffer, handles command calling and execution */
-int magic(struct_path *head, char **token, char *buffer);
 
 #endif /* GRANDPARENT_H */

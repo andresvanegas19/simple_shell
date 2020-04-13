@@ -13,9 +13,13 @@
 int main(int ac, char **av)
 {
 	char *path = NULL;
-	struct_path *head = NULL;
-	int validacion = 0;
+	struct_path *head_path = NULL;
+/*	struct_path *head_env = NULL; */
+	int validacion = 0, num_cmd = 0;
 	(void) av;
+
+/* Aca recibe el archivo, hace un loop dependiendo de las lineas de codigo*/
+/* y cuando ya acabe el loop retorna si ejecutarse el demas codigo*/
 	if (ac != 1)
 	{
 		perror("Error: Too may starting parameters.");
@@ -24,100 +28,168 @@ int main(int ac, char **av)
 	path = get_path(environ, "PATH");
 	if (path)
 	{
-		head = made_the_linked_list_path(path);
+		head_path = made_the_linked_list_path(path);
 		free(path);
 	}
-	if (isatty(0))
-		validacion = 5;
+
+	/*head_env = made_the_linked_list_enviroment(environ);*/
+
 	while (1)
-		prompt(head, validacion);
+	{
+		if (isatty(0))
+			validacion = 5;
+		num_cmd++;
+		prompt(head_path, validacion);
+	}
 
 	return (0);
 }
 
 /**
- * magic - checks possible instances for printing and executes the one
- * for each specific case (function hub).
- * @head: Pointer to head of linked list.
+ * support_magic - checks possible instances for printing and execute avoid the
+ *  problem whit the path
+ * @token: Pointer to result.
+ *
+ * Return: 0 or what the chosen function returns
+ */
+int support_magic(char **token)
+{
+	char raiz[5] = "/bin/";
+	struct stat st;
+	int i;
+
+/* If there is a /bin/something, it executes it */
+	for (i = 0; raiz[i] == (*token)[i] && i < 5; i++)
+	{
+		if (i == 4)
+			if (stat(token[0], &st) == 0 && st.st_mode & S_IXUSR)
+			{
+				command(token[0], token, environ);
+				return (0);
+			}
+	}
+/* Checks if what is received is a ./something type executable */
+	if ((*token)[0] == '.' || ((*token)[0] == '.' && (*token)[1] == '/'))
+	{
+/* Check if the file exists and use the bitwise to check is executable*/
+		if (stat(token[0], &st) == 0 && st.st_mode & S_IXUSR)
+			command(token[0], token, environ);
+		else
+			perror("no permissions");
+		return (0);
+	}
+	return (-1);
+}
+/**
+ * builtint_functions - checks possible instances for printing and executes
+ * the command
+ * @head_path: Pointer to head_path of linked list.
  * @token: Pointer to tokenized buffer.
  * @buffer: Buffer without '\n'.
  *
  * Return: 0 or what the chosen function returns
  */
-int magic(struct_path *head, char **token, char *buffer)
+int built(struct_path *head_path, char **token, char *buffer)
 {
-	int i;
-	char raiz[5] = "/bin/", *path_cmd = NULL;
-	struct stat st;
-	char *ptr;
-/* Checks if path variable is obstructed by :*/
-	ptr = get_path(environ, "PATH");
-	if (ptr)
-		if (*ptr == ':')
-			if (stat(token[0], &st) == 0)
-			{
-				command(token[0], token, environ);
-				free(ptr);
-				return (0);
-			}
-	free(ptr);
 	if (strcmp(token[0], "exit") == 0)
 	{
 /* a token dos hay que transformarlo en un numero*/
 		free(buffer);
-		free_list(head);
-		exitfuncion();
+		free_list(head_path);
+		exitfuncion(token[0]);
 	}
 	else if (strcmp(token[0], "env") == 0)
 	{
 		print_env(environ);
 		return (0);
 	}
-/* If there is a /bin/something, it executes it */
-	for (i = 0; raiz[i] == (*token)[i] && i < 5; i++)
-		if (i == 4)
-			if (stat(token[0], &st) == 0)
+
+	return (-1);
+
+}
+
+/* se deben manejar errores de permisos*/
+/**
+ * magic - checks possible instances for printing and executes the one
+ * for each specific case (function hub).
+ * @head_path: Pointer to head_path of linked list.
+ * @token: Pointer to tokenized buffer.
+ * @buffer: Buffer without '\n'.
+ *
+ * Return: 0 or what the chosen function returns
+ */
+int magic(struct_path *head_path, char **token, char *buffer)
+{
+	char *path_cmd = NULL, *ptr = NULL;
+	struct stat st;
+	int retorno = 0;
+
+	retorno = built(head_path, token, buffer);
+	if (retorno == 0)
+		return (0);
+	retorno = 0;
+
+	/* Checks if path variable is obstructed by :*/
+	ptr = get_path(environ, "PATH");
+	if (ptr)
+		if (*ptr == ':')
+			if (stat(token[0], &st) == 0 && st.st_mode & S_IXUSR)
 			{
 				command(token[0], token, environ);
+				free(ptr);
 				return (0);
 			}
-/* Checks if what is received is a ./something type executable */
-	if ((*token)[0] == '.' && (*token)[1] == '/')
-		if (stat(token[0], &st) == 0)
-		{
-			command(token[0], token, environ);
-			return (0);
-		}
-	if (head != NULL)
-		path_cmd = basic_commands(token[0], head);
-	if (!path_cmd)
+	free(ptr);
+	retorno = support_magic(token);
+	if (retorno == 0)
 		return (0);
-/* Checks if command has execute permissions */
-	if (path_cmd)
+
+	if (head_path != NULL)
+		path_cmd = basic_commands(token[0], head_path);
+	if (!path_cmd)
 	{
-		if (stat(path_cmd, &st) == 0)
-		{
-			command(path_cmd, token, environ);
-			free(path_cmd);
-			return (0);
-		}
-		else
-			perror(path_cmd);
-			free(path_cmd);
+		perror("not command found");
 		return (0);
 	}
+/* Checks if command has execute permissions  whit the path_cmd*/
+	if (stat(path_cmd, &st) == 0 && st.st_mode & S_IXUSR)
+	{
+		command(path_cmd, token, environ);
+		free(path_cmd);
+	}
 	return (0);
-/* Aca retorna -1 si no encuentra nada de los comandos ejecutados */
+}
+/**
+ * printError - it will print the error
+ * @validacion: to choose what kind of error print
+ * @num_cmd: is the counter to track how many fails it appear
+ * @command: the command it has to try
+ *
+ */
+void printError(int num_cmd, int validacion, char *command)
+{
+	(void) num_cmd;
+	/* validacion == 0 significa que no va encontrar el comando */
+	if (validacion == 0)
+	{
+		write(1, "sh: ", 4);
+		/* aca va el itoa que convierte de numero a string*/
+		write(1, "1:", 2);
+		write(1, " ", 2);
+		write(1, command, _strlen(command));
+		write(1, ":  command not found", 21);
+		write(1, "\n", 1);
+	}
 }
 
 /**
- * prompt - prints promt, checks for errors in it, tokenizes it and calls magic.
- * @head: pointer to first element in linked list.
+ * prompt - prints promt, checks for errors in it, tokenizes it and calls magic
+ * @head_path: pointer to first element in linked list.
  * @validacion: number sent by isatty to determine whether to print or not.
  *
  * Return: NULL.
  */
-char *prompt(struct_path *head, int validacion)
+char *prompt(struct_path *head_path, int validacion)
 {
 	char *buffer = NULL, *divide[200];
 	size_t length = 0;
@@ -130,7 +202,7 @@ char *prompt(struct_path *head, int validacion)
 /* Checks if buffer ammount of chars is EOF */
 	if (validar == EOF)
 	{
-		free_list(head);
+		free_list(head_path);
 		if (validacion == 5)
 			write(1, "\n", 2);
 		free(buffer);
@@ -143,14 +215,14 @@ char *prompt(struct_path *head, int validacion)
 		free(buffer);
 		return (NULL);
 	}
-
 	for (; buffer[i] != '\n'; i++)
 		;
 	buffer[i] = '\0';
+
 	divide[j] = strtok(buffer, " \t");
 	while (divide[j] != NULL)
 		divide[++j] = strtok(NULL, " \t");
-	magic(head, divide, buffer);
+	magic(head_path, divide, buffer);
 	free(buffer);
 	return (NULL);
 }
@@ -191,24 +263,23 @@ int command(char *path, char **args, char **environ)
  * basic_commands - opens space in memory and allocates directions of
  * basic commands.
  * @comando: command to execute.
- * @head: pointer to first element in singly linked list.
+ * @head_path: pointer to first element in singly linked list.
  *
  * Return: Null.
  */
-char *basic_commands(char *comando, struct_path *head)
+char *basic_commands(char *comando, struct_path *head_path)
 {
 	struct stat st;
 	char *path_cmd = NULL;
 
-	while (head->next)
+	while (head_path->next)
 	{
-		path_cmd = malloc((strlen(head->str) + strlen(comando)) + 2);
-		strcat(strcat(strcpy(path_cmd, head->str), "/"), comando);
-		if (stat(path_cmd, &st) == 0)
+		path_cmd = malloc((_strlen(head_path->str) + _strlen(comando)) + 2);
+		_strcat(_strcat(_strcpy(path_cmd, head_path->str), "/"), comando);
+		if (stat(path_cmd, &st) == 0 && st.st_mode & S_IXUSR)
 			return (path_cmd);
-
 		free(path_cmd);
-		head = head->next;
+		head_path = head_path->next;
 	}
 	return (NULL);
 }
@@ -225,18 +296,20 @@ void print_env(char **environ)
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
-		write(STDOUT_FILENO, environ[i], strlen(environ[i]));
+		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
 		write(STDOUT_FILENO, "\n", 2);
 	}
 }
 
 /**
  * exitfuncion - exits.
+ * @signal: is the satus of the exit
  *
  * Return: void.
  */
-void exitfuncion(void)
+void exitfuncion(char *signal)
 {
+	(void) signal;
 	exit(0);
 }
 
@@ -249,15 +322,31 @@ void exitfuncion(void)
  */
 int verificarbuffer(char *buffer, int validar)
 {
-	char losnulos[4] = {'\n', ' ', '\t'};
-	int i = 0, j = 0, error = 0;
+	char losnulos[5] = {' ', '\n', '.', '\t'};
+	int i = 0, j = 0, error = 0, punto = 0;
 
 	for (i = 0; buffer[i]; i++)
-		for (j = 0; j < 4; j++)
+	{
+		if (buffer[i] == '.')
+			punto++;
+		for (j = 0; j < 5; j++)
+		{
 			if (buffer[i] == losnulos[j])
 				error++;
+		}
+	}
+
+
 	if (error == validar)
+	{
+		i -= 1;
+		buffer[i] = '\0';
+		if (punto >= 2)
+		{
+			printError(3, 0, buffer);
+		}
 		return (-1);
+	}
 	return (0);
 }
 
@@ -270,7 +359,7 @@ int verificarbuffer(char *buffer, int validar)
 void manejar_signal(int valor)
 {
 	(void) valor;
-	write(STDOUT_FILENO, "\nnoseagay$ ", strlen("\nnoseagay$ "));
+	write(STDOUT_FILENO, "\nnoseagay$ ", _strlen("\nnoseagay$ "));
 }
 
 /**
@@ -282,17 +371,36 @@ void manejar_signal(int valor)
  */
 struct_path *made_the_linked_list_path(char *path)
 {
-	struct_path *head = NULL;
+	struct_path *head_path = NULL;
 	char *token = NULL;
 
 	token = strtok(path, ":");
 	while (token)
 	{
-		add_node_end(&head, token);
+		add_node_end(&head_path, token);
 		token = strtok(NULL, ":");
 	}
+	return (head_path);
+}
+
+/**
+ * made_the_linked_list_enviroment - creates linked list of enviromental var
+ * @environ: is a double pointer to the enviromental var
+ *
+ * Return: head, pointer to first element of linked list.
+ */
+struct_path *made_the_linked_list_enviroment(char **environ)
+{
+	struct_path *head = NULL;
+	int i;
+
+	for (i = 0; environ[i]; i++)
+/*Se le pasa la direccion de memoria para que pueda modificar head*/
+		add_node_end(&head, environ[i]);
+
 	return (head);
 }
+
 
 /**
  * add_node_end - adds as many nodes as needed to store PATH.
@@ -311,7 +419,7 @@ struct_path *add_node_end(struct_path **head, char *str)
 		perror("Error: ");
 		return (NULL);
 	}
-	newNode->str = strdup(str);
+	newNode->str = _strdup(str);
 	newNode->next = NULL;
 	if (!*head)
 	{
@@ -323,6 +431,18 @@ struct_path *add_node_end(struct_path **head, char *str)
 	end->next = newNode;
 	return (newNode);
 }
+
+int print_list(struct_path *h)
+{
+	int compareer;
+	for (compareer = 0; h; compareer++)
+	{
+		printf("%s\n",h->str);
+		h = h->next;
+	}
+	return (compareer);
+}
+
 
 /**
  * free_list - frees the list containing the PATH.
@@ -357,17 +477,17 @@ char *get_path(char **environ, char *direccion)
 
 	for (i = 0; environ[i]; i++)
 	{
-		env = malloc(strlen(environ[i]) + 1);
-		strcpy(env, environ[i]);
+		env = malloc(_strlen(environ[i]) + 1);
+		_strcpy(env, environ[i]);
 		token = strtok(env, "=");
-		validacion = strcmp(env, direccion);
+		validacion = _strcmp(env, direccion);
 		if (validacion == 0)
 		{
 			token = strtok(NULL, "=");
 			if (token)
 			{
-				full_path = malloc(strlen(token) + 1);
-				strcpy(full_path, token);
+				full_path = malloc(_strlen(token) + 1);
+				_strcpy(full_path, token);
 				free(env);
 				return (full_path);
 			}
@@ -395,10 +515,89 @@ int _strcmp(char *s1, char *s2)
 	while (s1[i] != '\0')
 	{
 		if (s1[i] != s2[i])
-		{
 			return (s1[i] - s2[i]);
-		}
 		i++;
 	}
 	return (0);
+}
+
+/**
+ * _strlen - count the characters a string have
+ * @s: pointer to the variable string
+ * Return: the value of i
+ */
+int _strlen(char *s)
+{
+	int i;
+
+	for (i = 0; s[i] != '\0'; ++i)
+		;
+	return (i);
+}
+
+/**
+ * _strcpy - create an strcpy.
+ * @dest: destination string.
+ * @src: source to be copied.
+ *
+ * Return: the dest of the string
+ */
+
+char *_strcpy(char *dest, char *src)
+{
+	int cont;
+
+	for (cont = 0; src[cont] != '\0'; cont++)
+		dest[cont] = src[cont];
+
+	dest[cont] = src[cont];
+	return (dest);
+}
+
+/**
+ * _strdup - newly space in memory, which contains a copy of the string
+ * @str: pointer to the new string
+ *
+ * Return: an string.
+ */
+char *_strdup(char *str)
+{
+	char *nstr;
+	int a = 0, b;
+	if (str == NULL)
+		return (NULL);
+	while (str[a])
+		a++;
+
+	nstr = malloc((a + 1) * sizeof(char));
+	if (nstr == NULL)
+		return (NULL);
+	for (b = 0; b <= a; b++)
+		nstr[b] = str[b];
+
+	return (nstr);
+}
+
+/**
+ * _strcat - concatenates two strings.
+ * @dest: string to be copied to.
+ * @src: string to copy from.
+ * Return: the dest of the string
+ */
+char *_strcat(char *strg1, char *strg2)
+{
+	char *start = strg1;
+
+	while(*strg1 != '\0')
+		strg1++;
+
+	while(*strg2 != '\0')
+	{
+		*strg1 = *strg2;
+		strg1++;
+		strg2++;
+	}
+
+	*strg1 = '\0';
+	return (start);
 }
