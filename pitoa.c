@@ -16,7 +16,7 @@ char *pitoa(int v)
 	while (n >= 10)
 	{
 		*p++ = table[n % 10];
-		n/= 10;
+		n /= 10;
 	}
 	*p++ = table[n];
 	*p = '\0';
