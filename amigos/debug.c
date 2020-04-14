@@ -61,20 +61,19 @@ int support_magic(char **token)
 	for (i = 0; raiz[i] == (*token)[i] && i < 5; i++)
 	{
 		if (i == 4)
-			if (stat(token[0], &st) == 0 && st.st_mode & S_IXUSR)
-			{
-				command(token[0], token, environ);
-				return (0);
-			}
+			if (access(token[0], F_OK|X_OK) == 0)
+				if (stat(token[0], &st) == 0 && st.st_mode & S_IXUSR)
+				{
+					command(token[0], token, environ);
+					return (0);
+				}
 	}
 /* Checks if what is received is a ./something type executable */
-	if ((*token)[0] == '.' || ((*token)[0] == '.' && (*token)[1] == '/'))
+	if (((*token)[0] == '.' && (*token)[1] == '/'))
 	{
 /* Check if the file exists and use the bitwise to check is executable*/
 		if (stat(token[0], &st) == 0 && st.st_mode & S_IXUSR)
 			command(token[0], token, environ);
-		else
-			perror("no permissions");
 		return (0);
 	}
 	return (-1);
@@ -177,7 +176,7 @@ void printError(int num_cmd, int validacion, char *command,  char *func_name)
 		write(1, num_str, _strlen(num_str));
 		write(1, ": ", 2);
 		write(1, command, _strlen(command));
-		write(1, ": command not found", 20);
+		write(1, ": not found", 11);
 		write(1, "\n", 1);
 		free(num_str);
 	}
@@ -616,7 +615,7 @@ char *_strcat(char *strg1, char *strg2)
 
 char *pitoa(int v)
 {
-	char *str = malloc(2);
+	char *str = malloc(100);
 	char table[11] = "0123456789";
 	char *p= str;
 	unsigned int n = v;
@@ -643,3 +642,4 @@ char *strrev(char *str)
 
 	return (str);
 }
+
