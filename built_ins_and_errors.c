@@ -11,16 +11,24 @@
  */
 int built(struct_path *head_path, char **token, char *buffer)
 {
-	if (strcmp(token[0], "exit") == 0)
+	if (_strcmp(token[0], "exit") == 0)
 	{
 /* a token dos hay que transformarlo en un numero*/
 		free(buffer);
 		free_list(head_path);
 		exitfuncion(token[0]);
 	}
-	else if (strcmp(token[0], "env") == 0)
+	else if (_strcmp(token[0], "env") == 0)
 	{
-		print_env(environ);
+		if (token[1] == NULL)
+		{
+			print_env(environ);
+			return (0);
+		}
+		write(1,"env: ",5);
+		write(1,token[1],_strlen(token[1]));
+		write(1,": No such file or directory",27);
+		write(1,"\n",1);
 		return (0);
 	}
 

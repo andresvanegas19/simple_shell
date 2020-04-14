@@ -34,7 +34,7 @@ char *strrev(char *str)
 	char c, *front, *back;
 
 	for (front = str, back = str + _strlen(str) - 1; front < back; front++,
-		     back--)
+			back--)
 	{
 		c = *front;
 		*front = *back;
