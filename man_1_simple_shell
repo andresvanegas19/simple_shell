@@ -1,0 +1,63 @@
+.TH hsh 1 "APR 14  2020" "1.0" "sh"
+.SH NAME
+    sh - Bourne shell
+.PP
+.SH SYNOPSIS
+.TP
+.B ./hsh
+echo "ls -la" | ./hsh
+$ ls -la
+.SH USE
+for the use of the following project it is advisable to use the following version of Ubuntu 14.04 LTS. And to compile this project it is advisable to use the following flags
+.TP
+.B -Wall -Werror -Wextra -pedantic *.c -o hsh
+.SH NO-INTERACTIVE
+the use of the non-interactive shell may not display the promp and not have an interaction with the user
+.PP
+.SH DESCRIPTION
+.PP
+A command line interpreter is any program that allows the entering of commands and then executes those commands to the operating system. Although it is used as an interactive command interpreter.
+.SH COMMAND
+Commands are simply sequences of words separated by spaces, the first letter denotes the name of the command, and the other words will be sequence of this command. commands can be divided between the separator ;. so the command interpreter will recognize that several commands are typed.
+.SS Built-ins
+the following built-int commands the sh recive:
+.TP
+.B cd [directory]
+changes current directory of the process.
+.TP
+.B env [No arguments]
+show the environment variables.
+.TP
+.B exit [number]
+to exit from the shell you type.
+.SS
+Commands executables
+.TP
+.B echo [arguments...]
+ command in linux is used to display line of text/string that are passed as an argument
+.TP
+.B ls [arguments...] [files...]
+list all files in your current directory.
+.TP
+.B pwd [No arguments]
+command for printing the name of the current working directory
+.SH SIGNALS
+the interrupting signals are added to the sh prototype, these are handled in interactive fashion only
+.SH EXECUTION
+The execution process takes a few steps to prevent an unwanted file from running, the process is to look at builtint commands first after if the path has special characters and then look at if the command is inside the path
+.SH ENVIRONMENT VARIABLES
+The environment is a list of name-value pairs that is passed to an executed program in the same way as a normal argument list, The shell interacts with the environment in several ways. On invocation, the shell scans the environment and creates a parameter for each name found
+.TP
+HOME
+	The default home directory of the system
+.TP
+PATH
+	A list of directories for executables.
+.TP
+OLDPWD
+	Is the previus current directories
+.TP
+PWD
+     The current parent directory
+.SH AUTHORS
+This project is write by Christian Campos and Andres Reyes
