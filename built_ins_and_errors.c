@@ -25,10 +25,10 @@ int built(struct_path *head_path, char **token, char *buffer)
 			print_env(environ);
 			return (0);
 		}
-		write(1,"env: ",5);
-		write(1,token[1],_strlen(token[1]));
-		write(1,": No such file or directory",27);
-		write(1,"\n",1);
+		write(1, "env: ", 5);
+		write(1, token[1], _strlen(token[1]));
+		write(1, ": No such file or directory", 27);
+		write(1, "\n", 1);
 		return (0);
 	}
 
