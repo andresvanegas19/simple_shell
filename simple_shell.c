@@ -1,5 +1,5 @@
 #include "library.h"
-/* gcc -Wall -Werror -Wextra -pedantic debug.c -o hsh */
+/* gcc -Wall -Werror -Wextra -pedantic *.c -o hsh */
 /* valgrind --leak-check=full --show-leak-kinds=all hsh */
 
 /**
@@ -63,7 +63,7 @@ int num_cmd)
 	struct stat st;
 	int retorno = 0;
 
-	retorno = built(head_path, token, buffer);
+	retorno = built(head_path, token, buffer, func_name, num_cmd);
 	if (retorno == 0)
 		return (0);
 	retorno = 0;

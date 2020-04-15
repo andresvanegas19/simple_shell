@@ -27,7 +27,8 @@ typedef struct path_of_the_directory
 
 } struct_path;
 
-int built(struct_path *head_path, char **token, char *buffer);
+int built(struct_path *head_path, char **token, char *buffer,  char *func_name,
+int num_cmd);
 
 struct_path *made_the_linked_list_path(char *path);
 struct_path *add_node_end(struct_path **head, char *str);
@@ -51,7 +52,7 @@ char *get_path(char **environ, char *direccion);
 char *basic_commands(char *comando, struct_path *head_path);
 
 /* Funciones made by us*/
-void print_env(char **environ);
+char *print_env(char **environ);
 void exitfuncion(char *signal);
 
 /* Manipular los strings */
@@ -75,6 +76,6 @@ int support_magic(char **token);
 
 char *strrev(char *str);
 char *pitoa(int v);
-
+int isallchars(char *token);
 
 #endif /* GRANDPARENT_H */

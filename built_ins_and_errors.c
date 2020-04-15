@@ -9,14 +9,21 @@
  *
  * Return: 0 or what the chosen function returns
  */
-int built(struct_path *head_path, char **token, char *buffer)
+int built(struct_path *head_path, char **token, char *buffer, char *func_name
+, int num_cmd)
 {
 	if (_strcmp(token[0], "exit") == 0)
 	{
+		if (token[1] == NULL || isallchars(token[1]) == 1)
+		{
+			free(buffer);
+			free_list(head_path);
+			exitfuncion(token[0]);
+		}
+		else
+			printError(num_cmd, 2, token[1], func_name);
+		return (0);
 /* a token dos hay que transformarlo en un numero*/
-		free(buffer);
-		free_list(head_path);
-		exitfuncion(token[0]);
 	}
 	else if (_strcmp(token[0], "env") == 0)
 	{
@@ -25,10 +32,10 @@ int built(struct_path *head_path, char **token, char *buffer)
 			print_env(environ);
 			return (0);
 		}
-		write(1,"env: ",5);
-		write(1,token[1],_strlen(token[1]));
-		write(1,": No such file or directory",27);
-		write(1,"\n",1);
+		write(1, "env: ", 5);
+		write(1, token[1], _strlen(token[1]));
+		write(1, ": No such file or directory", 27);
+		write(1, "\n", 1);
 		return (0);
 	}
 
@@ -79,15 +86,23 @@ char *get_path(char **environ, char *direccion)
  *
  * Return: void.
  */
-void print_env(char **environ)
+char *print_env(char **environ)
 {
 	int i;
+
+	if (environ == NULL || *environ == NULL)
+	{
+		write(1, "not found enviromental variable", 31);
+		return (NULL);
+	}
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
 		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
 		write(STDOUT_FILENO, "\n", 2);
 	}
+
+	return(NULL);
 }
 
 /**
@@ -104,7 +119,6 @@ void printError(int num_cmd, int validacion, char *command,  char *func_name)
 	if (validacion == 0)
 	{
 		write(1, func_name, _strlen(func_name));
-		/* aca va el pitoa que convierte de numero a string*/
 		write(1, ": ", 2);
 		write(1, num_str, _strlen(num_str));
 		write(1, ": ", 2);
@@ -116,12 +130,22 @@ void printError(int num_cmd, int validacion, char *command,  char *func_name)
 	if (validacion == 1)
 	{
 		write(1, func_name, _strlen(func_name));
-		/* aca va el pitoa que convierte de numero a string*/
 		write(1, ": ", 2);
 		write(1, num_str, _strlen(num_str));
 		write(1, ": ", 2);
 		write(1, command, _strlen(command));
 		write(1, ": Permission denied", 20);
+		write(1, "\n", 1);
+		free(num_str);
+	}
+	if (validacion == 2)
+	{
+		write(1, func_name, _strlen(func_name));
+		write(1, ": ", 2);
+		write(1, num_str, _strlen(num_str));
+		write(1, ": exit:", 7);
+		write(1, " Illegal number: ", 17);
+		write(1, command, _strlen(command));
 		write(1, "\n", 1);
 		free(num_str);
 	}

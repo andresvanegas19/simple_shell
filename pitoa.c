@@ -43,3 +43,20 @@ char *strrev(char *str)
 
 	return (str);
 }
+
+int isallchars(char *token)
+{
+	int i = 0, j = 0;
+
+	for (;token[i] != '\0'; i++)
+	{
+		if ((token[i] >= 'a' && token[i] <= 'z') || (token[i] >= 'A' && token[i] <= 'Z'))
+			j++;
+	}
+
+	if (j > 0)
+/* found a letter into the string*/
+		return (0);
+	else
+		return (1);
+}
