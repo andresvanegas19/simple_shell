@@ -60,7 +60,7 @@ char *get_path(char **environ, char *direccion)
 		env = malloc(_strlen(environ[i]) + 1);
 		_strcpy(env, environ[i]);
 		token = strtok(env, "=");
-		validacion = _strcmp(env, direccion);
+		validacion = _strcmp(token, direccion);
 		if (validacion == 0)
 		{
 			token = strtok(NULL, "=");
@@ -71,8 +71,6 @@ char *get_path(char **environ, char *direccion)
 				free(env);
 				return (full_path);
 			}
-			else
-				return (NULL);
 		}
 		free(env);
 		token = NULL;
