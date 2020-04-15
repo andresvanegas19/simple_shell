@@ -26,13 +26,11 @@ int verificarbuffer(char *buffer, int validar, char *func_name, int num_cmd)
 
 	if (error == validar)
 	{
-		i -= 1;
-		buffer[i] = '\0';
-		if (punto == 2)
-			printError(num_cmd, 1, buffer, func_name);
-		else if (punto >= 2)
-			printError(num_cmd, 0, buffer, func_name);
-		return (-1);
+		if (punto == 1)
+			return (-1);
+		else
+			return (-1);
+		
 	}
 	return (0);
 }
@@ -62,7 +60,7 @@ int support_magic(char **token)
 				}
 	}
 /* Checks if what is received is a ./something type executable */
-	if (((*token)[0] == '.' && (*token)[1] == '/'))
+	if ((*token)[0] == '.' && (*token)[1] == '/')
 	{
 /* Check if the file exists and use the bitwise to check is executable*/
 		if (stat(token[0], &st) == 0 && st.st_mode & S_IXUSR)

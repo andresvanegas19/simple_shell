@@ -13,7 +13,14 @@ int built(struct_path *head_path, char **token, char *buffer, char *func_name
 , int num_cmd)
 {
 	/*int numb = _itoa(token[1]);*/
+	DIR *dir = opendir(token[0]);
 
+	if (dir)
+	{
+		printError(num_cmd, 1, token[0], func_name);
+		closedir(dir);
+		return (0);
+	}
 	if (_strcmp(token[0], "exit") == 0)
 	{
 		if (token[1] == NULL)
@@ -37,6 +44,10 @@ int built(struct_path *head_path, char **token, char *buffer, char *func_name
 		write(1, token[1], _strlen(token[1]));
 		write(1, ": No such file or directory", 27);
 		write(1, "\n", 1);
+		return (0);
+	}
+	else if (_strcmp(token[0], "help") == 0)
+	{
 		return (0);
 	}
 

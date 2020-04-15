@@ -67,7 +67,6 @@ int num_cmd)
 	if (retorno == 0)
 		return (0);
 	retorno = 0;
-
 	/* Checks if path variable is obstructed by :*/
 	ptr = get_path(environ, "PATH");
 	if (ptr)
@@ -82,7 +81,6 @@ int num_cmd)
 	retorno = support_magic(token);
 	if (retorno == 0)
 		return (0);
-
 	if (head_path != NULL)
 		path_cmd = basic_commands(token[0], head_path);
 	if (!path_cmd)
