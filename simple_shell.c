@@ -6,7 +6,7 @@
  * main - Checks arguments started wit the function and checks there are
  * no pipelines sent.
  * @ac: argument counter.
- * @av: argument vector (not used, voided at start).
+ * @av: argument vector. Used to print error.
  *
  * Return: Always 0.
  */
@@ -21,7 +21,7 @@ int main(int ac, char **av)
 /* y cuando ya acabe el loop retorna si ejecutarse el demas codigo*/
 	if (ac != 1)
 	{
-		perror("Error: Too may starting parameters.");
+		perror("Error: Too many starting parameters.");
 		return (0);
 	}
 	path = get_path(environ, "PATH");
