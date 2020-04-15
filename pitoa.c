@@ -44,15 +44,20 @@ char *strrev(char *str)
 	return (str);
 }
 
+/**
+ * isallchars - verificated is the number has a letter
+ * @token: string to containt numbers or lettlers
+ *
+ * Return: 0 found a letter, 1 not found a letter
+ */
 int isallchars(char *token)
 {
 	int i = 0, j = 0;
 
-	for (;token[i] != '\0'; i++)
-	{
-		if ((token[i] >= 'a' && token[i] <= 'z') || (token[i] >= 'A' && token[i] <= 'Z'))
+	for (; token[i] != '\0'; i++)
+		if ((token[i] >= 'a' && token[i] <= 'z') ||
+			(token[i] >= 'A' && token[i] <= 'Z'))
 			j++;
-	}
 
 	if (j > 0)
 /* found a letter into the string*/

@@ -102,7 +102,7 @@ char *print_env(char **environ)
 		write(STDOUT_FILENO, "\n", 2);
 	}
 
-	return(NULL);
+	return (NULL);
 }
 
 /**
