@@ -15,7 +15,7 @@ int main(int ac, char **av)
 	char *path = NULL;
 	struct_path *head_path = NULL;
 	/*struct_path *head_env = NULL;*/
-	int validacion = 0, num_cmd = 0;
+	int num_cmd = 0;
 
 /* Aca recibe el archivo, hace un loop dependiendo de las lineas de codigo*/
 /* y cuando ya acabe el loop retorna si ejecutarse el demas codigo*/
@@ -35,10 +35,8 @@ int main(int ac, char **av)
 
 	while (1)
 	{
-		if (isatty(0))
-			validacion = 5;
 		num_cmd++;
-		prompt(head_path, validacion, av[0], num_cmd);
+		prompt(head_path, av[0], num_cmd);
 	}
 
 	return (0);
@@ -100,20 +98,18 @@ int num_cmd)
 /**
  * prompt - prints promt, checks for errors in it, tokenizes it and calls magic
  * @head_path: pointer to first element in linked list.
- * @validacion: number sent by isatty to determine whether to print or not.
  * @func_name: Info typed by user.
  * @num_cmd: number of times error has been printed.
  *
  * Return: NULL.
  */
-char *prompt(struct_path *head_path, int validacion, char *func_name,
-int num_cmd)
+char *prompt(struct_path *head_path, char *func_name, int num_cmd)
 {
-	char *buffer = NULL, *divide[200];
+	char *buffer = NULL, *divide[64];
 	size_t length = 0;
 	int i = 0, j = 0, validar = 0, espacioss = 0;
 
-	if (validacion == 5)
+	if (isatty(0))
 		write(STDOUT_FILENO, "ShellOfDoom$ ", strlen("ShellOfDoom$ "));
 	signal(SIGINT, manejar_signal);
 	validar = getline(&buffer, &length, stdin);
@@ -121,7 +117,7 @@ int num_cmd)
 	if (validar == EOF)
 	{
 		free_list(head_path);
-		if (validacion == 5)
+		if (isatty(0))
 			write(1, "\n", 2);
 		free(buffer);
 		exit(EXIT_SUCCESS);
@@ -133,6 +129,7 @@ int num_cmd)
 		free(buffer);
 		return (NULL);
 	}
+
 	for (; buffer[i] != '\n'; i++)
 		;
 	buffer[i] = '\0';

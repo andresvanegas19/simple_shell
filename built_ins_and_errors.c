@@ -65,7 +65,7 @@ int built(struct_path *head_path, char **token, char *buffer, char *func_name
  */
 char *get_path(char **environ, char *direccion)
 {
-	int i = 0, validacion = 0;
+	int i = 0;
 	char *token = NULL, *full_path = NULL, *env = NULL;
 
 	for (i = 0; environ[i]; i++)
@@ -73,8 +73,7 @@ char *get_path(char **environ, char *direccion)
 		env = malloc(_strlen(environ[i]) + 1);
 		_strcpy(env, environ[i]);
 		token = strtok(env, "=");
-		validacion = _strcmp(token, direccion);
-		if (validacion == 0)
+		if ((_strcmp(token, direccion)) == 0)
 		{
 			token = strtok(NULL, "=");
 			if (token)
@@ -88,7 +87,7 @@ char *get_path(char **environ, char *direccion)
 		free(env);
 		token = NULL;
 	}
-	perror("Error : not found the enviromental variables - path");
+	write(1, "Error : not found the enviromental variables - path", 52);
 	return (NULL);
 }
 

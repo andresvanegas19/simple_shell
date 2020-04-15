@@ -9,14 +9,14 @@
  */
 int verificarbuffer(char *buffer, int validar)
 {
-	char losnulos[5] = {' ', '\n', '.', '\t'};
+	char losnulos[4] = {' ', '\n', '.', '\t'};
 	int i = 0, j = 0, error = 0, punto = 0;
 
 	for (i = 0; buffer[i]; i++)
 	{
 		if (buffer[i] == '.')
 			punto++;
-		for (j = 0; j < 5; j++)
+		for (j = 0; j < 4; j++)
 		{
 			if (buffer[i] == losnulos[j])
 				error++;

@@ -67,8 +67,7 @@ char *_strcat(char *strg1, char *strg2);
 int command(char *path, char **args, char **environ);
 
 /* Funcion que ajunta el promp */
-char *prompt(struct_path *head_path, int validacion, char *func_name,
-int num_cmd);
+char *prompt(struct_path *head_path, char *func_name, int num_cmd);
 int magic(struct_path *head_path, char **token, char *buffer,  char *func_name,
 int num_cmd);
 int support_magic(char **token);
