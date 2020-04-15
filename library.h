@@ -43,7 +43,7 @@ extern char **environ;
 void manejar_signal(int valor);
 
 /* verificar que no hay errores*/
-int verificarbuffer(char *buffer, int validar, char *func_name, int num_cmd);
+int verificarbuffer(char *buffer, int validar);
 
 /* Imprimir errores */
 void printError(int num_cmd, int validacion, char *command,  char *func_name);

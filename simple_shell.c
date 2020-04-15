@@ -127,7 +127,7 @@ int num_cmd)
 		exit(EXIT_SUCCESS);
 	}
 /* Checks for spaces or tabs in buffer*/
-	espacioss = verificarbuffer(buffer, validar, func_name, num_cmd);
+	espacioss = verificarbuffer(buffer, validar);
 	if (espacioss == -1)
 	{
 		free(buffer);

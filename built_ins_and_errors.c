@@ -6,6 +6,8 @@
  * @head_path: Pointer to head_path of linked list.
  * @token: Pointer to tokenized buffer.
  * @buffer: Buffer without '\n'.
+ * @func_name: is the name how invote the sh
+ * @num_cmd: is the number of how many comands it types
  *
  * Return: 0 or what the chosen function returns
  */

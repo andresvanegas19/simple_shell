@@ -4,11 +4,10 @@
  * verificarbuffer - checks if buffer receives bothersome characters.
  * @buffer: buffer containing what was printed by user.
  * @validar: ammount of chars in buffer.
- * @func_name: name of function to print in errors.
- * @num_cmd: to print the number of errors in document so far.
+ *
  * Return: 0 or -1 if it fails.
  */
-int verificarbuffer(char *buffer, int validar, char *func_name, int num_cmd)
+int verificarbuffer(char *buffer, int validar)
 {
 	char losnulos[5] = {' ', '\n', '.', '\t'};
 	int i = 0, j = 0, error = 0, punto = 0;
@@ -30,7 +29,6 @@ int verificarbuffer(char *buffer, int validar, char *func_name, int num_cmd)
 			return (-1);
 		else
 			return (-1);
-		
 	}
 	return (0);
 }
