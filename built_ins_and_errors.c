@@ -12,9 +12,11 @@
 int built(struct_path *head_path, char **token, char *buffer, char *func_name
 , int num_cmd)
 {
+	/*int numb = _itoa(token[1]);*/
+
 	if (_strcmp(token[0], "exit") == 0)
 	{
-		if (token[1] == NULL || isallchars(token[1]) == 1)
+		if (token[1] == NULL)
 		{
 			free(buffer);
 			free_list(head_path);
@@ -23,7 +25,6 @@ int built(struct_path *head_path, char **token, char *buffer, char *func_name
 		else
 			printError(num_cmd, 2, token[1], func_name);
 		return (0);
-/* a token dos hay que transformarlo en un numero*/
 	}
 	else if (_strcmp(token[0], "env") == 0)
 	{
@@ -150,3 +151,4 @@ void printError(int num_cmd, int validacion, char *command,  char *func_name)
 		free(num_str);
 	}
 }
+

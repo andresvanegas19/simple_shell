@@ -76,6 +76,6 @@ int support_magic(char **token);
 
 char *strrev(char *str);
 char *pitoa(int v);
-int isallchars(char *token);
+
 
 #endif /* GRANDPARENT_H */
