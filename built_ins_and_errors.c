@@ -11,8 +11,8 @@
  *
  * Return: 0 or what the chosen function returns
  */
-int built(struct_path *head_path, char **token, char *buffer, char *func_name
-, int num_cmd)
+int built(struct_path *head_path, char **token, char *buffer, char *func_name,
+int num_cmd)
 {
 	/*int numb = _itoa(token[1]);*/
 	DIR *dir = opendir(token[0]);

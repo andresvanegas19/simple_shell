@@ -24,7 +24,11 @@ int main(int ac, char **av)
 		perror("Error: Too many starting parameters.");
 		return (0);
 	}
+
+	setenv("PATH", ":/bin/", 1);
+
 	path = get_path(environ, "PATH");
+
 	if (path)
 	{
 		head_path = made_the_linked_list_path(path);
@@ -65,16 +69,24 @@ int num_cmd)
 	if (retorno == 0)
 		return (0);
 	retorno = 0;
-	/* Checks if path variable is obstructed by :*/
 	ptr = get_path(environ, "PATH");
 	if (ptr)
 		if (*ptr == ':')
-			if (stat(token[0], &st) == 0 && st.st_mode & S_IXUSR)
+		{
+			if (stat(token[0], &st) == 0 && access(token[0], X_OK)
+			    == 0)
 			{
 				command(token[0], token, environ);
 				free(ptr);
 				return (0);
 			}
+			else
+			{
+				printError(num_cmd, 1, token[0], func_name);
+				free(ptr);
+				return (0);
+			}
+		}
 	free(ptr);
 	retorno = support_magic(token);
 	if (retorno == 0)
@@ -86,7 +98,6 @@ int num_cmd)
 		printError(num_cmd, 0, token[0], func_name);
 		return (0);
 	}
-/* Checks if command has execute permissions  whit the path_cmd*/
 	if (stat(path_cmd, &st) == 0 && st.st_mode & S_IXUSR)
 	{
 		command(path_cmd, token, environ);
