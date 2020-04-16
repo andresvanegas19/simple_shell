@@ -25,7 +25,7 @@ int main(int ac, char **av)
 		return (0);
 	}
 
-	/*setenv("PATH", ":/bin/", 1);*/
+	/*setenv("PATH", "", 1);*/
 
 	path = get_path(environ, "PATH");
 
@@ -83,10 +83,15 @@ int num_cmd)
 		printError(num_cmd, 0, token[0], func_name);
 		return (0);
 	}
-	if (stat(path_cmd, &st) == 0 && st.st_mode & S_IXUSR)
+	if (path_cmd)
 	{
-		command(path_cmd, token, environ);
-		free(path_cmd);
+		if (stat(path_cmd, &st) == 0)
+			if (access(path_cmd, R_OK) == 0)
+				if (access(path_cmd, X_OK) == 0)
+				{
+					command(path_cmd, token, environ);
+					free(path_cmd);
+				}
 	}
 	return (0);
 }

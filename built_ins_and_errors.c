@@ -87,7 +87,6 @@ char *get_path(char **environ, char *direccion)
 		free(env);
 		token = NULL;
 	}
-	write(1, "Error : not found the enviromental variables - path", 52);
 	return (NULL);
 }
 

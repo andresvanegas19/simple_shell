@@ -35,6 +35,11 @@ char *basic_commands(char *comando, struct_path *head_path, char *func_name,
 		free(path_cmd);
 		head_path = head_path->next;
 	}
+	if (head_path->next == NULL)
+	{
+		printError(num_cmd, 0, comando, func_name);
+		return (NULL);
+	}
 	return (NULL);
 }
 
