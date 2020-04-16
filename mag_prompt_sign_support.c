@@ -4,33 +4,58 @@
  * verificarbuffer - checks if buffer receives bothersome characters.
  * @buffer: buffer containing what was printed by user.
  * @validar: ammount of chars in buffer.
+ * @func_name: name of our function.
+ * @num_cmd: number of times our func has been executed.
  *
  * Return: 0 or -1 if it fails.
  */
-int verificarbuffer(char *buffer, int validar)
+int verificarbuffer(char *buffer, int validar, char *func_name, int num_cmd)
 {
-	char losnulos[4] = {' ', '\n', '.', '\t'};
-	int i = 0, j = 0, error = 0, punto = 0;
+	char losnulos[4] = {' ', '\n', '\t'};
+	int i = 0, j = 0, error = 0, punto = 0, spacedot = 0;
 
 	for (i = 0; buffer[i]; i++)
 	{
-		if (buffer[i] == '.')
-			punto++;
 		for (j = 0; j < 4; j++)
 		{
 			if (buffer[i] == losnulos[j])
 				error++;
 		}
 	}
-
-	if (error == validar)
+	for (i = 0; buffer[i]; i++)
 	{
-		if (punto < 0)
-			return (-1);
-		else
-			return (-1);
+		if (buffer[i] == '.')
+			punto++;
+		if (buffer[i] == '.' && (buffer[i + 1] == ' ' || buffer[i + 1] == '\t'))
+			spacedot++;
 	}
+	if ((punto >= 2 && spacedot > 0) && (error + punto) == validar)
+	{
+		printError2(num_cmd, func_name);
+		return (-1);
+	}
+	if (punto == 1 && (error + punto) == validar)
+		return (-1);
+	if (error == validar)
+		return (-1);
 	return (0);
+}
+/**
+ * printError2 - it will print the error
+ * @num_cmd: is the counter to track how many fails it appear
+ * @func_name: prints what was typed by user ans is causing errors.
+ */
+/* sh: 3: .: .: not found */
+void printError2(int num_cmd,  char *func_name)
+{
+	char *num_str = pitoa(num_cmd);
+
+	write(1, func_name, _strlen(func_name));
+	write(1, ": ", 2);
+	write(1, num_str, _strlen(num_str));
+	write(1, ": .: .: not found", 17);
+	write(1, "\n", 1);
+	free(num_str);
 }
 
 /**

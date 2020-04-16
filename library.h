@@ -43,7 +43,7 @@ extern char **environ;
 void manejar_signal(int valor);
 
 /* verificar que no hay errores*/
-int verificarbuffer(char *buffer, int validar);
+int verificarbuffer(char *buffer, int validar, char *func_name, int num_cmd);
 
 /* Imprimir errores */
 void printError(int num_cmd, int validacion, char *command,  char *func_name);
@@ -53,7 +53,7 @@ char *get_path(char **environ, char *direccion);
 char *basic_commands(char *comando, struct_path *head_path, char *func_name,
 		     int num_cmd);
 int handlethedouble(char **token,  char *func_name, int num_cmd);
-
+void printError2(int num_cmd,  char *func_name);
 
 /* Funciones made by us*/
 char *print_env(char **environ);
