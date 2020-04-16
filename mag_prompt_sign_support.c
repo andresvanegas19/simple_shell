@@ -25,7 +25,7 @@ int verificarbuffer(char *buffer, int validar)
 
 	if (error == validar)
 	{
-		if (punto == 1)
+		if (punto < 0)
 			return (-1);
 		else
 			return (-1);
@@ -61,7 +61,6 @@ int support_magic(char **token)
 					return (-1);
 			}
 	}
-/* Checks if what is received is a ./something type executable */
 	if ((*token)[0] == '.' && (*token)[1] == '/')
 	{
 /* Check if the file exists and use the bitwise to check is executable*/

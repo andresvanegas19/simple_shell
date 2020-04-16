@@ -78,20 +78,24 @@ int num_cmd)
 	if (head_path != NULL)
 		path_cmd = basic_commands(token[0], head_path, func_name,
 					  num_cmd);
+
 	if (!path_cmd)
 	{
-		printError(num_cmd, 0, token[0], func_name);
 		return (0);
 	}
 	if (path_cmd)
 	{
 		if (stat(path_cmd, &st) == 0)
+		{
 			if (access(path_cmd, R_OK) == 0)
 				if (access(path_cmd, X_OK) == 0)
 				{
 					command(path_cmd, token, environ);
 					free(path_cmd);
 				}
+		}
+		else
+			printError(num_cmd, 1, token[0], func_name);
 	}
 	return (0);
 }
