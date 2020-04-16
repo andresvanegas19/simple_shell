@@ -25,7 +25,7 @@ int main(int ac, char **av)
 		return (0);
 	}
 
-	setenv("PATH", ":/bin/", 1);
+	/*setenv("PATH", ":/bin/", 1);*/
 
 	path = get_path(environ, "PATH");
 
@@ -46,7 +46,6 @@ int main(int ac, char **av)
 	return (0);
 }
 
-/* se deben manejar errores de permisos*/
 /**
  * magic - checks possible instances for printing and executes the one
  * for each specific case (function hub).
@@ -61,33 +60,18 @@ int main(int ac, char **av)
 int magic(struct_path *head_path, char **token, char *buffer,  char *func_name,
 int num_cmd)
 {
-	char *path_cmd = NULL, *ptr = NULL;
+	char *path_cmd = NULL;
 	struct stat st;
 	int retorno = 0;
 
 	retorno = built(head_path, token, buffer, func_name, num_cmd);
 	if (retorno == 0)
 		return (0);
-	retorno = 0;
-	ptr = get_path(environ, "PATH");
-	if (ptr)
-		if (*ptr == ':')
-		{
-			if (stat(token[0], &st) == 0 && access(token[0], X_OK)
-			    == 0)
-			{
-				command(token[0], token, environ);
-				free(ptr);
-				return (0);
-			}
-			else
-			{
-				printError(num_cmd, 1, token[0], func_name);
-				free(ptr);
-				return (0);
-			}
-		}
-	free(ptr);
+
+	retorno = handlethedouble(token, func_name, num_cmd);
+	if (retorno == 0)
+		return (0);
+
 	retorno = support_magic(token);
 	if (retorno == 0)
 		return (0);
