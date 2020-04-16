@@ -76,7 +76,8 @@ int num_cmd)
 	if (retorno == 0)
 		return (0);
 	if (head_path != NULL)
-		path_cmd = basic_commands(token[0], head_path);
+		path_cmd = basic_commands(token[0], head_path, func_name,
+					  num_cmd);
 	if (!path_cmd)
 	{
 		printError(num_cmd, 0, token[0], func_name);

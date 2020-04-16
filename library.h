@@ -50,7 +50,8 @@ void printError(int num_cmd, int validacion, char *command,  char *func_name);
 
 /* obtener los path y otras cosas*/
 char *get_path(char **environ, char *direccion);
-char *basic_commands(char *comando, struct_path *head_path);
+char *basic_commands(char *comando, struct_path *head_path, char *func_name,
+		     int num_cmd);
 int handlethedouble(char **token,  char *func_name, int num_cmd);
 
 

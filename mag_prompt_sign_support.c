@@ -50,22 +50,33 @@ int support_magic(char **token)
 	for (i = 0; raiz[i] == (*token)[i] && i < 5; i++)
 	{
 		if (i == 4)
-			if (access(token[0], F_OK | X_OK) == 0)
-				if (stat(token[0], &st) == 0 && st.st_mode & S_IXUSR)
+			if (stat(token[0], &st) == 0)
+			{
+				if (access(token[0], (R_OK | X_OK)) == 0)
 				{
 					command(token[0], token, environ);
 					return (0);
 				}
+				else
+					return (-1);
+			}
 	}
 /* Checks if what is received is a ./something type executable */
 	if ((*token)[0] == '.' && (*token)[1] == '/')
 	{
 /* Check if the file exists and use the bitwise to check is executable*/
-		if (stat(token[0], &st) == 0 && st.st_mode & S_IXUSR)
-			command(token[0], token, environ);
-		return (0);
+		if (stat(token[0], &st) == 0)
+		{
+			if (access(token[0], (R_OK | X_OK)) == 0)
+			{
+				command(token[0], token, environ);
+				return (0);
+			}
+			else
+				return (-1);
+		}
 	}
-	return (-1);
+	return (1);
 }
 
 /**
