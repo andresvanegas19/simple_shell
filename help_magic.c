@@ -28,8 +28,7 @@ int handlethedouble(char **token,  char *func_name, int num_cmd)
 				}
 				else
 				{
-					printError(num_cmd, 1, token[0],
-						   func_name);
+					printError(num_cmd, 1, token[0], func_name);
 					free(ptr);
 					return (0);
 				}

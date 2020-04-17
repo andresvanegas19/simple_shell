@@ -40,23 +40,7 @@ int verificarbuffer(char *buffer, int validar, char *func_name, int num_cmd)
 		return (-1);
 	return (0);
 }
-/**
- * printError2 - it will print the error
- * @num_cmd: is the counter to track how many fails it appear
- * @func_name: prints what was typed by user ans is causing errors.
- */
-/* sh: 3: .: .: not found */
-void printError2(int num_cmd,  char *func_name)
-{
-	char *num_str = pitoa(num_cmd);
 
-	write(1, func_name, _strlen(func_name));
-	write(1, ": ", 2);
-	write(1, num_str, _strlen(num_str));
-	write(1, ": .: .: not found", 17);
-	write(1, "\n", 1);
-	free(num_str);
-}
 
 /**
  * support_magic - checks possible instances for printing and execute avoid the
@@ -101,28 +85,4 @@ int support_magic(char **token)
 		}
 	}
 	return (1);
-}
-
-/**
- * exitfuncion - exits.
- * @signal: is the satus of the exit
- *
- * Return: void.
- */
-void exitfuncion(char *signal)
-{
-	(void) signal;
-	exit(0);
-}
-
-/**
- * manejar_signal - supresses use of ctrl - c.
- * @valor: value sent by signal.
- *
- * Return: void.
- */
-void manejar_signal(int valor)
-{
-	(void) valor;
-	write(STDOUT_FILENO, "\nShellOfDoom$ ", _strlen("\nShellOfDoom$ "));
 }

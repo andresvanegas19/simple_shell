@@ -26,8 +26,7 @@ char *basic_commands(char *comando, struct_path *head_path, char *func_name,
 				return (path_cmd);
 			else if (access(path_cmd, (R_OK & X_OK)) == 0)
 			{
-				printError(num_cmd, 1,
-					   comando, func_name);
+				printError(num_cmd, 1, comando, func_name);
 				free(path_cmd);
 				return (NULL);
 			}
@@ -44,88 +43,36 @@ char *basic_commands(char *comando, struct_path *head_path, char *func_name,
 }
 
 /**
- * made_the_linked_list_path - creates linked list
- * made of PATH adresses.
- * @path: path to compartmentalize.
+ * get_path - finds and stores environmental variable PATH.
+ * @environ: global environment variable.
+ * @direccion: global variable to store (PATH in this case).
  *
- * Return: head, pointer to first element of linked list.
+ * Return: full path or NULL if it fails.
  */
-struct_path *made_the_linked_list_path(char *path)
+char *get_path(char **environ, char *direccion)
 {
-	struct_path *head_path = NULL;
-	char *token = NULL;
-
-	token = strtok(path, ":");
-	while (token)
-	{
-		add_node_end(&head_path, token);
-		token = strtok(NULL, ":");
-	}
-	return (head_path);
-}
-
-/**
- * made_the_linked_list_enviroment - creates linked list of enviromental var
- * @environ: is a double pointer to the enviromental var
- *
- * Return: head, pointer to first element of linked list.
- */
-struct_path *made_the_linked_list_enviroment(char **environ)
-{
-	struct_path *head = NULL;
-	int i;
+	int i = 0;
+	char *token = NULL, *full_path = NULL, *env = NULL;
 
 	for (i = 0; environ[i]; i++)
-/*Se le pasa la direccion de memoria para que pueda modificar head*/
-		add_node_end(&head, environ[i]);
-
-	return (head);
+	{
+		env = malloc(_strlen(environ[i]) + 1);
+		_strcpy(env, environ[i]);
+		token = strtok(env, "=");
+		if ((_strcmp(token, direccion)) == 0)
+		{
+			token = strtok(NULL, "=");
+			if (token)
+			{
+				full_path = malloc(_strlen(token) + 1);
+				_strcpy(full_path, token);
+				free(env);
+				return (full_path);
+			}
+		}
+		free(env);
+		token = NULL;
+	}
+	return (NULL);
 }
 
-/**
- * add_node_end - adds as many nodes as needed to store PATH.
- * @head: first element of linked list.
- * @str: an adress in path.
- *
- * Return: new node.
- */
-struct_path *add_node_end(struct_path **head, char *str)
-{
-	struct_path *newNode = NULL, *end = *head;
-
-	newNode = malloc(sizeof(struct_path));
-	if (newNode == NULL)
-	{
-		perror("Error: ");
-		return (NULL);
-	}
-	newNode->str = _strdup(str);
-	newNode->next = NULL;
-	if (!*head)
-	{
-		*head = newNode;
-		return (*head);
-	}
-	while (end->next != NULL)
-		end = end->next;
-	end->next = newNode;
-	return (newNode);
-}
-
-/**
- * print_list - prints list for path.
- * @h: list to print.
- *
- * Return: segments of list to print.
- */
-int print_list(struct_path *h)
-{
-	int compareer;
-
-	for (compareer = 0; h; compareer++)
-	{
-		printf("%s\n", h->str);
-		h = h->next;
-	}
-	return (compareer);
-}

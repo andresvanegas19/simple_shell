@@ -30,11 +30,15 @@ typedef struct path_of_the_directory
 
 int built(struct_path *head_path, char **token, char *buffer,  char *func_name,
 int num_cmd);
+int built2(char **token, char *func_name, int num_cmd);
+int change_the_dir(char **token, char *func_name, int num_cmd);
 
 struct_path *made_the_linked_list_path(char *path);
 struct_path *add_node_end(struct_path **head, char *str);
 struct_path *made_the_linked_list_enviroment(char **environ);
 void free_list(struct_path *head);
+int set_env(char *name_var, char *overwrite_var, char **environ);
+
 
 /* Para manejar el env y errno*/
 extern char **environ;
@@ -46,7 +50,7 @@ void manejar_signal(int valor);
 int verificarbuffer(char *buffer, int validar, char *func_name, int num_cmd);
 
 /* Imprimir errores */
-void printError(int num_cmd, int validacion, char *command,  char *func_name);
+int printError(int num_cmd, int validacion, char *command,  char *func_name);
 
 /* obtener los path y otras cosas*/
 char *get_path(char **environ, char *direccion);
@@ -70,7 +74,7 @@ char *_strcat(char *strg1, char *strg2);
 int command(char *path, char **args, char **environ);
 
 /* Funcion que ajunta el promp */
-char *prompt(struct_path *head_path, char *func_name, int num_cmd);
+int prompt(struct_path *head_path, char *func_name, int num_cmd);
 int magic(struct_path *head_path, char **token, char *buffer,  char *func_name,
 int num_cmd);
 int support_magic(char **token);

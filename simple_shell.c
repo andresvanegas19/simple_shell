@@ -14,7 +14,6 @@ int main(int ac, char **av)
 {
 	char *path = NULL;
 	struct_path *head_path = NULL;
-	/*struct_path *head_env = NULL;*/
 	int num_cmd = 0;
 
 /* Aca recibe el archivo, hace un loop dependiendo de las lineas de codigo*/
@@ -22,10 +21,8 @@ int main(int ac, char **av)
 	if (ac != 1)
 	{
 		perror("Error: Too many starting parameters.");
-		return (0);
+		return (127);
 	}
-
-	/*setenv("PATH", "", 1);*/
 
 	path = get_path(environ, "PATH");
 
@@ -35,15 +32,13 @@ int main(int ac, char **av)
 		free(path);
 	}
 
-	/*head_env = made_the_linked_list_enviroment(environ);*/
-
-	while (1)
+	while ((1 * 1) == 1)
 	{
 		num_cmd++;
 		prompt(head_path, av[0], num_cmd);
 	}
 
-	return (0);
+	return (545);
 }
 
 /**
@@ -66,23 +61,21 @@ int num_cmd)
 
 	retorno = built(head_path, token, buffer, func_name, num_cmd);
 	if (retorno == 0)
-		return (0);
+		return (100);
 
 	retorno = handlethedouble(token, func_name, num_cmd);
 	if (retorno == 0)
-		return (0);
+		return (100);
 
 	retorno = support_magic(token);
 	if (retorno == 0)
-		return (0);
+		return (100);
 	if (head_path != NULL)
-		path_cmd = basic_commands(token[0], head_path, func_name,
-					  num_cmd);
+		path_cmd = basic_commands(token[0], head_path, func_name, num_cmd);
 
 	if (!path_cmd)
-	{
-		return (0);
-	}
+		return (100);
+
 	if (path_cmd)
 	{
 		if (stat(path_cmd, &st) == 0)
@@ -97,7 +90,7 @@ int num_cmd)
 		else
 			printError(num_cmd, 1, token[0], func_name);
 	}
-	return (0);
+	return (100);
 }
 
 /**
@@ -108,7 +101,7 @@ int num_cmd)
  *
  * Return: NULL.
  */
-char *prompt(struct_path *head_path, char *func_name, int num_cmd)
+int prompt(struct_path *head_path, char *func_name, int num_cmd)
 {
 	char *buffer = NULL, *divide[64];
 	size_t length = 0;
@@ -132,7 +125,7 @@ char *prompt(struct_path *head_path, char *func_name, int num_cmd)
 	if (espacioss == -1)
 	{
 		free(buffer);
-		return (NULL);
+		return (100);
 	}
 
 	for (; buffer[i] != '\n'; i++)
@@ -144,7 +137,7 @@ char *prompt(struct_path *head_path, char *func_name, int num_cmd)
 		divide[++j] = strtok(NULL, " \t");
 	magic(head_path, divide, buffer, func_name, num_cmd);
 	free(buffer);
-	return (NULL);
+	return (100);
 }
 
 /**
@@ -176,24 +169,5 @@ int command(char *path, char **args, char **environ)
 	}
 	else
 		child_pid = wait(&status);
-	return (0);
-}
-
-/**
- * free_list - frees the list containing the PATH.
- * @head: pointer to first element in linked list.
- *
- * Return: void.
- */
-void free_list(struct_path *head)
-{
-	struct_path *back;
-
-	while (head)
-	{
-		back = head->next;
-		free(head->str);
-		free(head);
-		head = back;
-	}
+	return (100);
 }
