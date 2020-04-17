@@ -83,7 +83,6 @@ int built2(char **token)
 int change_the_dir(char **token)
 {
 	char *path = NULL, *current_dir = NULL;
-	struct stat st;
 
 	if (token[1] == NULL || _strcmp(token[1], "~") == 0
 	|| _strcmp(token[1], "$HOME") == 0)
