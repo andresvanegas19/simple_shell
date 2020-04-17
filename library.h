@@ -38,7 +38,11 @@ struct_path *add_node_end(struct_path **head, char *str);
 struct_path *made_the_linked_list_enviroment(char **environ);
 void free_list(struct_path *head);
 int set_env(char *name_var, char *overwrite_var, char **environ);
-
+int printHelp(char **token);
+void printbasic(void);
+void printcd(void);
+void printexit(void);
+void printenv(void);
 
 /* Para manejar el env y errno*/
 extern char **environ;

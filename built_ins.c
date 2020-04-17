@@ -69,6 +69,7 @@ int built2(char **token)
 	}
 	else if (_strcmp(token[0], "help") == 0)
 	{
+		printHelp(token);
 		return (0);
 	}
 	return (-1);
