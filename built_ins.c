@@ -83,21 +83,22 @@ int built2(char **token)
 int change_the_dir(char **token)
 {
 	char *path = NULL, *current_dir = NULL;
+	struct stat st;
 
-	if (token[1] == NULL || _strcmp(token[1], "~") == 0)
+	if (token[1] == NULL || _strcmp(token[1], "~") == 0
+	|| _strcmp(token[1], "$HOME") == 0)
 	{
 		path = get_path(environ, "HOME");
 		chdir(path);
 	}
-	if (_strcmp(token[1], "-") == 0)
+	else if (_strcmp(token[1], "-") == 0)
 	{
 		path = get_path(environ, "OLDPWD");
 		chdir(path);
 	}
-	if (token[1] != NULL)
-	{
+
+	else if (token[1] != NULL)
 		chdir(token[1]);
-	}
 
 	path = getcwd(current_dir, 100);
 	current_dir = get_path(environ, "PWD");
