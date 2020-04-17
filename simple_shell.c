@@ -21,7 +21,7 @@ int main(int ac, char **av)
 	if (ac != 1)
 	{
 		perror("Error: Too many starting parameters.");
-		return (127);
+		return (0);
 	}
 
 	path = get_path(environ, "PATH");

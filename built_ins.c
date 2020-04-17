@@ -142,7 +142,5 @@ char *print_env(char **environ)
 void exitfuncion(char *signal)
 {
 	(void) signal;
-	exit(127);
+	exit();
 }
-
-
