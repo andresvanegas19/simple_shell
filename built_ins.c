@@ -57,8 +57,6 @@ int num_cmd)
 /**
  * built2 - checks possible instances for printing and executes the command
  * @token: Pointer to tokenized buffer.
- * @func_name: is the name how invote the sh
- * @num_cmd: is the number of how many comands it types
  *
  * Return: 0 or what the chosen function returns
  */
@@ -78,8 +76,6 @@ int built2(char **token)
 /**
  * change_the_dir - is to change the directory
  * @token: Pointer to tokenized buffer.
- * @func_name: is the name how invote the sh
- * @num_cmd: is the number of how many comands it types
  *
  * Return: 0 or what the chosen function returns
  */
