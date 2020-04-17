@@ -17,6 +17,8 @@ void manejar_signal(int valor)
  * @num_cmd: is the counter to track how many fails it appear
  * @command: the command it has to try
  * @func_name: prints what was typed by user ans is causing errors.
+ *
+ * Return: is for sign to finish the program
  */
 int printError(int num_cmd, int validacion, char *command,  char *func_name)
 {

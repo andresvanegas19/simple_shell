@@ -15,7 +15,7 @@ int set_env(char *name_var, char *overwrite_var, char **environ)
 				strcpy(environ[i], name_var);
 				strcat(environ[i], "=");
 				strcat(environ[i], overwrite_var);
-				return( 0);
+				return (0);
 			}
 		}
 	}
