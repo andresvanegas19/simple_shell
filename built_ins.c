@@ -1,11 +1,23 @@
 #include "library.h"
 
+/**
+ * built - checks possible instances for printing and executes
+ * the command
+ * @head_path: Pointer to head_path of linked list.
+ * @token: Pointer to tokenized buffer.
+ * @buffer: Buffer without '\n'.
+ * @func_name: is the name how invote the sh
+ * @num_cmd: is the number of how many comands it types
+ *
+ * Return: 0 or what the chosen function returns
+ */
 int built(struct_path *head_path, char **token, char *buffer, char *func_name,
 int num_cmd)
 {
 	/*int numb = _itoa(token[1]);*/
 	int validacion = 0;
 	DIR *dir = opendir(token[0]);
+
 	if (dir)
 	{
 		printError(num_cmd, 1, token[0], func_name);
@@ -42,6 +54,14 @@ int num_cmd)
 		return (0);
 	return (-1);
 }
+/**
+ * built2 - checks possible instances for printing and executes the command
+ * @token: Pointer to tokenized buffer.
+ * @func_name: is the name how invote the sh
+ * @num_cmd: is the number of how many comands it types
+ *
+ * Return: 0 or what the chosen function returns
+ */
 int built2(char **token, char *func_name, int num_cmd)
 {
 	if (_strcmp(token[0], "cd") == 0)
@@ -55,7 +75,14 @@ int built2(char **token, char *func_name, int num_cmd)
 	}
 	return (-1);
 }
-
+/**
+ * change_the_dir - is to change the directory
+ * @token: Pointer to tokenized buffer.
+ * @func_name: is the name how invote the sh
+ * @num_cmd: is the number of how many comands it types
+ *
+ * Return: 0 or what the chosen function returns
+ */
 int change_the_dir(char **token, char *func_name, int num_cmd)
 {
 	char *path = NULL, *current_dir = NULL;
@@ -72,7 +99,6 @@ int change_the_dir(char **token, char *func_name, int num_cmd)
 		path = get_path(environ, "OLDPWD");
 		chdir(path);
 	}
-
 	if (token[1] != NULL)
 	{
 		if (stat(token[0], &st) == 0)

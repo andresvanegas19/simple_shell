@@ -58,7 +58,7 @@ int printError(int num_cmd, int validacion, char *command,  char *func_name)
 		free(num_str);
 		return (100);
 	}
-	return(100);
+	return (100);
 }
 
 /**
