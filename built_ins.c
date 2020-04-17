@@ -95,19 +95,12 @@ int change_the_dir(char **token, char *func_name, int num_cmd)
 	}
 	if (_strcmp(token[1], "-") == 0)
 	{
-		printf("aca paso");
 		path = get_path(environ, "OLDPWD");
 		chdir(path);
 	}
 	if (token[1] != NULL)
 	{
-		if (stat(token[0], &st) == 0)
-			chdir(token[1]);
-		else
-		{
-			printError(num_cmd, 1, token[1], func_name);
-			return (0);
-		}
+		chdir(token[1]);
 	}
 
 	path = getcwd(current_dir, 100);
