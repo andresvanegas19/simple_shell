@@ -49,7 +49,7 @@ int num_cmd)
 		write(1, "\n", 1);
 		return (0);
 	}
-	validacion =  built2(token, func_name, num_cmd);
+	validacion =  built2(token);
 	if (validacion == 0)
 		return (0);
 	return (-1);
@@ -62,11 +62,11 @@ int num_cmd)
  *
  * Return: 0 or what the chosen function returns
  */
-int built2(char **token, char *func_name, int num_cmd)
+int built2(char **token)
 {
 	if (_strcmp(token[0], "cd") == 0)
 	{
-		change_the_dir(token, func_name, num_cmd);
+		change_the_dir(token);
 		return (0);
 	}
 	else if (_strcmp(token[0], "help") == 0)
@@ -83,10 +83,9 @@ int built2(char **token, char *func_name, int num_cmd)
  *
  * Return: 0 or what the chosen function returns
  */
-int change_the_dir(char **token, char *func_name, int num_cmd)
+int change_the_dir(char **token)
 {
 	char *path = NULL, *current_dir = NULL;
-	struct stat st;
 
 	if (token[1] == NULL || _strcmp(token[1], "~") == 0)
 	{

@@ -30,8 +30,8 @@ typedef struct path_of_the_directory
 
 int built(struct_path *head_path, char **token, char *buffer,  char *func_name,
 int num_cmd);
-int built2(char **token, char *func_name, int num_cmd);
-int change_the_dir(char **token, char *func_name, int num_cmd);
+int built2(char **token);
+int change_the_dir(char **token);
 
 struct_path *made_the_linked_list_path(char *path);
 struct_path *add_node_end(struct_path **head, char *str);
